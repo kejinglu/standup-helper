@@ -1,10 +1,10 @@
-```
 
-The script above uses the `exec` function from the `child_process` module to run the `git log` command and fetch the commit messages. It then uses the GPT model to summarize each commit message. It also fetches pull request information from the GitHub API using the `@octokit/rest` library and summarizes the PR titles using the GPT model.
+
+The js script uses the `exec` function from the `child_process` module to run the `git log` command and fetch the commit messages. It then uses the GPT model to summarize each commit message. It also fetches pull request information from the GitHub API using the `@octokit/rest` library and summarizes the PR titles using the GPT model.
 
 To run this script, you need to have the necessary environment variables set for the GitHub token and OpenAI API key. You can set these environment variables in your terminal before running the script.
 
-```bash
+```
 export GITHUB_TOKEN=your_github_token
 export OPENAI_API_KEY=your_openai_api_key
 node git-log-reader.js
