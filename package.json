@@ -1,0 +1,23 @@
+{
+  "name": "standup-helper",
+  "version": "1.0.0",
+  "description": "Generate summary as speech on standups",
+  "main": "git-log-reader.js",
+  "scripts": {
+    "test": "tsts"
+  },
+  "keywords": [
+    "github",
+    "standup",
+    "natrual-language"
+  ],
+  "author": "kejing lu",
+  "license": "MIT",
+  "dependencies": {
+    "easygpt": "^1.6.2",
+    "fetch-jira": "^1.0.166",
+    "jira-client": "^8.2.2",
+    "node": "^21.7.1",
+    "octokit": "^3.1.2"
+  }
+}
