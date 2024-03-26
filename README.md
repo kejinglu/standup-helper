@@ -12,13 +12,13 @@ export GITHUB_TOKEN=your_github_token
 export OPENAI_API_KEY=your_openai_api_key
 ```
 
-This script demonstrates how you can combine GitHub API access, and text summarization using GPT to analyze and summarize commit messages and pull request titles. You can further customize and extend this script to suit your specific use case and requirements.
 
-## Conclusion
+## Current progress
+<img width="745" alt="Screenshot 2024-03-26 at 3 21 52 PM" src="https://github.com/kejinglu/standup-helper/assets/32747843/08e38d97-37ef-4747-a310-f22091b8bebd">
 
-In this guide, we explored how to use Node.js to interact with Git repositories, parse Git logs, and access GitHub API data. We also demonstrated how to use the GPT model for text summarization to analyze and summarize commit messages and pull request titles. By combining these tools and techniques, you can build powerful automation scripts and tools for analyzing and processing Git repository data.
 
-If you have any questions or feedback, please feel free to reach out to us. We'd love to hear from you!
+
+If you have any questions or feedback, please feel free to reach out to me. 
 
 ## References
 - [Node.js Child Processes](https://nodejs.org/api/child_process.html)
