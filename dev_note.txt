@@ -1,0 +1,23 @@
+1.jira:
+
+GET /rest/api/2/project/{projectIdOrKey}/statuses
+https://docs.atlassian.com/software/jira/docs/api/REST/7.6.1/#api/2/project-getAllStatuses
+
+2.find project id:
+<JIRA_BASE_URL>/rest/api/latest/project/<project_key> 
+
+hostname+".jira.com/rest/api/latest/project/"+project_key
+(usually the prefix of your tickets e.g. `FAB` in FAB-123)
+https://confluence.atlassian.com/jirakb/how-to-get-project-id-from-the-jira-user-interface-827341414.html
+res=> res.id
+
+3. search for issues I'm dealing with: in progress and closed
+(1)Get board id from `GetAllBoard`
+    https://developer.atlassian.com/cloud/jira/software/rest/api-group-board/#api-rest-agile-1-0-board-get
+
+4. jira cli tool 
+https://github.com/ankitpokhrel/jira-cli#:~:text=%24%20jira%20sprint%20list%20%2D%2Dcurrent%20%2Da%24(jira%20me)
+
+------------------ Github -----------------
+1.auth cli
+gh auth login

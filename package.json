@@ -2,9 +2,11 @@
   "name": "standup-helper",
   "version": "1.0.0",
   "description": "Generate summary as speech on standups",
-  "main": "git-log-reader.js",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "tsts"
+    "test": "tsts",
+    "devStart": "nodemon index.js"
   },
   "keywords": [
     "github",
@@ -14,10 +16,20 @@
   "author": "kejing lu",
   "license": "MIT",
   "dependencies": {
+    "chalk-animation": "^2.0.3",
     "easygpt": "^1.6.2",
+    "ejs": "^3.1.9",
+    "esm": "^3.2.25",
+    "express": "^4.19.2",
     "fetch-jira": "^1.0.166",
+    "figlet": "^1.7.0",
+    "gh": "^2.8.9",
+    "gradient-string": "^2.0.2",
+    "inquirer": "^9.2.16",
     "jira-client": "^8.2.2",
+    "nanospinner": "^1.1.0",
     "node": "^21.7.1",
+    "nodemon": "^3.1.0",
     "octokit": "^3.1.2"
   }
 }
