@@ -6,29 +6,34 @@ Access PR information from Github API
 */
 
 const { exec } = require('child_process');
-const { Octokit, App } = require('octokit');
+// const { Octokit, App } = require('octokit');
 const { GPT } = require('easygpt');
 var JiraApi = require('jira-client');
+const fetch = require('node-fetch');
 
 const palm_toolkit = require('palm_toolkit');
-const GPT3 = require('openai').GPT;
-const gpt3 = new GPT3({
-    apiKey: process.env.OPENAI_API_KEY,
-    gptVersion: 'text-davinci-003',
-});
-//Use Github API
-const octokit = new Octokit({
-    auth: process.env.GITHUB_TOKEN,
-    });
-    // Compare: https://docs.github.com/en/rest/reference/users#get-the-authenticated-user
-const {
-    data: { login },
-  } = await octokit.rest.users.getAuthenticated();
-  console.log("Hello, %s", login);
 
+//Use Github API
+// let git_authed = false;
+// async function initGitClient() {
+// const octokit = new Octokit({
+//     auth: process.env.GITHUB_TOKEN,
+//     });
+//     // Compare: https://docs.github.com/en/rest/reference/users#get-the-authenticated-user
+// const {
+//     data: { login },
+//   } = await octokit.rest.users.getAuthenticated()
+//   .then(({ data }) => {
+//     console.log(`Hello, ${data.login}`)
+//     git_authed = true;
+//   }).catch((error) => {
+//     console.error('Error:', error);
+//   });
+// }
+   
 const gpt = new GPT({
 });
-// Initialize JIRA
+// Initialize JIRA -> with oauth2 
 var jira = new JiraApi({
     protocol: 'https',
     host: 'jira.'+jirahost+'.com',
@@ -78,7 +83,7 @@ const getCommits = () => {
 }
 
 
-//rewrite getting pts
+//rewrite getting prs
 // Fetch the authenticated user's pull requests updated since the start of the last weekday
 const lastWeekdayStart = new Date();
 lastWeekdayStart.setDate(lastWeekdayStart.getDate() - (lastWeekdayStart.getDay() + 1) % 7);
@@ -99,13 +104,57 @@ const { data: pullRequests } = await octokit.rest.pulls.list({
 let jirahost = prompt("Enter JIRA host name (ususlly company name): ");
 let username = prompt("Enter JIRA username: ");
 let password = prompt("Enter JIRA password: ");
-
+let projectkey = prompt("Enter JIRA project key: (e.g. FAB in ticket FAB-123) ");
+const jiraBaseUrl = 'https://jira.'+jirahost+'.com';
 // Fetch the authenticated user's JIRA stories
 const getJiraStories = async () => {
     const jiraData = await jira.searchJira();
     console.log(jiraData);
 }
+//JIRA (1)Get board id
+let boardId = '';
+fetch(jiraBaseUrl+'/rest/agile/1.0/board?projectKeyOrId=' + projectkey+"maxResults=6", {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer <access_token>',//TODO: replace with your access token
+    'Accept': 'application/json'
+  }
+})
+  .then(response => {
+    console.log(
+      `Response: ${response.status} ${response.statusText}`
+    );
+    values = response.json().values;
+    boardId = values[0].id;
+    return response.text();
+  })
+  .then(text => console.log("fetch all boards in project: "+text))
+  .catch(err => console.error(err));
 
+  //JIRA (2)Get board issues
+    let issues = [];
+    let sprintId = 0;
+    fetch(jiraBaseUrl+'/rest/agile/1.0/board/' + boardId + '/issue', {
+        method: 'GET',
+        headers: {
+            'Authorization': 'Bearer <access_token>',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        console.log(
+            `Response: ${response.status} ${response.statusText}`
+        );
+        issues = response.json().issues;
+        sprintId = issues[0].fields.sprint.id;
+        //only keep issues in current sprint
+        issues = issues.filter(issue => issue.fields.sprint.id === sprintId);
+        return issues;
+    })
+    .then(issues => filter(issues, issue => issue.fields.assignee === 'me'))//TODO: replace with username
+    .then(issues => filter(issues, issue => issue.fields.updated > yesterday))
+    .then(issues => console.log("fetch all issues in sprint I worked on yesterday: "+issues))
+  
 
 getJiraStories();
 getCommits();
